@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <elm-header></elm-header>
     <router-view/>
-    <elm-footer></elm-footer>
   </div>
 </template>
 
