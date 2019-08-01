@@ -20,6 +20,12 @@ Vue.use(VueAxios,axios);
 import '@/assets/css/reset.css';
 // 页面调整
 import '@/assets/js/resize.js';
+
+// 引入 vAnt
+import Vant from 'vant';
+import 'vant/lib/index.css';
+
+Vue.use(Vant);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
