@@ -16,6 +16,10 @@ import VueAxios from 'vue-axios'
 
 Vue.use(VueAxios,axios);
 
+// 样式重置
+import '@/assets/css/reset.css';
+// 页面调整
+import '@/assets/js/resize.js';
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
