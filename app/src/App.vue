@@ -9,7 +9,6 @@ import ElmHeader from "./components/elmHeader/elmHeader";
 import ElmFooter from "./components/elmFooter/elmFooter";
 export default {
   name: 'App',
-  components: {ElmFooter, ElmHeader}
 }
 </script>
 
