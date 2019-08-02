@@ -26,10 +26,31 @@ import Vant from 'vant';
 import 'vant/lib/index.css';
 
 Vue.use(Vant);
+
+/*
+  Vuex状态管理
+ */
+const store = new Vuex.Store({
+  state: {
+    userLocation: null,
+  },
+  mutations: {
+    changeUserLocation(state, payload){
+      state.userLocation = payload;
+    }
+  },
+  getters: {
+
+  },
+  modules: {
+
+  }
+});
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 });
