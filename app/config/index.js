@@ -11,7 +11,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/v1': {
+      '/': {
         target: 'https://elm.cangdu.org/',
         changeOrigin: true
       }
