@@ -3,7 +3,7 @@
     <!--导航-->
     <div class="header">
       <van-nav-bar :title="infoList.name | omitEd" left-text="" fixed>
-        <van-icon name="search" slot="left" class="search"></van-icon>
+        <van-icon name="search" slot="left" class="search" @click="toSearch"></van-icon>
         <span slot="right" class="right-text login" @click="login">登录</span>
         <span slot="right" class="right-text shu">|</span>
         <span slot="right" class="right-text register" @click="register">注册</span>
@@ -18,7 +18,8 @@
               :key="cat.id"
               :icon="cat.image_url | joinPath"
               :text="cat.title"
-              to="#####">
+              @click="goFood(cat.title)"
+            >
             </van-grid-item>
           </van-grid>
         </van-swipe-item>
@@ -29,7 +30,7 @@
         <van-icon name="shop-collect-o" class="shop-collect-o"></van-icon>
         <span class="span-title">附近商家</span>
       </div>
-      <div class="shop-main" v-for="info in shopList" :key="info.id">
+      <div class="shop-main" v-for="info in shopList" :key="info.id" @click="goShop(info.id)">
         <van-image class="shop-img" :src="'http://elm.cangdu.org/img/'+ info.image_path"></van-image>
         <div class="title-right">
           <h4>{{info.name}}</h4>
@@ -55,33 +56,28 @@
                 <span class="segmentation">/</span>
                 <span class="order_time">{{info.order_lead_time}}</span>
               </p>
-
             </div>
           </section>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
   import Vue from 'vue';
+  import {mapMutations, mapState} from "vuex";
 
   export default {
     name: 'msite',
     created() {
+      // 更改底部tabBar索引
+      this.changeTabActive(0);
       // 获取定位
       let gpsHash = this.$route.query.gpsHash;
-      if (gpsHash) {
-        // 就调取 更新vuex --- userLocation
-        this.$store.commit('changeUserLocation', gpsHash);
-        localStorage.setItem('userLocation', gpsHash);
-      } else {
-        gpsHash = this.$store.state.userLocation || localStorage.getItem('userLocation');
-      }
+      this.gpsHash = gpsHash;
+
       Vue.axios.get(`v2/pois/${gpsHash}`).then(res => {
-        // console.log(res.data);
         let data = res.data;
         this.infoList = data;
         // 获取附近商店
@@ -104,16 +100,30 @@
       return {
         infoList: {name: ''},
         cateList: [],
-        shopList: []
+        shopList: [],
+        gpsHash: null
       }
     },
     methods: {
+      ...mapMutations(['changeTabActive', 'changeUserLocation']),
       login() {
         this.$router.push({path: '/login'});
       },
       register() {
         this.$router.push({path: '/register'});
       },
+      toSearch() {
+        this.$router.push({path: 'searchGood'});
+      },
+      goShop(id) {
+        this.$router.push({path: `shopDetail?geohash=${this.gpsHash}&id=${id}`});
+      },
+      goFood(title) {
+        this.$router.push({path: `food?geohash=${this.gpsHash}&title=${title}`});
+      },
+    },
+    computed: {
+      ...mapState(['userLocation']),
     },
     filters: {
       omitEd(value) {

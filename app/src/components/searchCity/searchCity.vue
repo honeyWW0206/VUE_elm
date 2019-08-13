@@ -12,7 +12,7 @@
 
       <p class="sHistory" v-if="isTouchSearch">搜索历史</p>
       <div class="isShowHistory">
-        <div class="history" v-for="(item, index) in cityList" :key="index" @click="getPois(item.geohash)">
+        <div class="history" v-for="(item, index) in cityList" :key="index" @click="getPoints(item.geohash)">
           <h4 class="address-tittle">{{item.name}}</h4>
           <p class="address-desc">{{item.address}}</p>
         </div>
@@ -27,6 +27,8 @@
 <script>
 
   import Vue from 'vue';
+  import {getStore, setStore} from "../../utils/mUtils";
+  import {mapMutations, mapState} from "vuex";
 
   export default {
     name: 'searchCity',
@@ -45,17 +47,18 @@
         get() {
           return this.cName;
         }
-      }
+      },
+      ...mapState(['placeHistory']),
     },
     created() {
       // 显示所选该城市信息
       let cId = this.$route.params.cities;
       if (cId) {
-        localStorage.setItem('cId', cId);
+        setStore('selectCityId', cId);
         this.getCityInfo(cId);
         this.city_id = cId;
       } else {
-        let lCid = localStorage.getItem('cId');
+        let lCid = getStore('selectCityId');
         this.getCityInfo(lCid);
         this.city_id = lCid;
       }
@@ -64,6 +67,7 @@
       this.getHistory();
     },
     methods: {
+      ...mapMutations(['changePlaceHistory']),
       goBack() {
         this.$router.go(-1);
       },
@@ -89,31 +93,33 @@
         })).data;
         if (getSearchAdd) {
           this.cityList = getSearchAdd;
-          localStorage.setItem('cityListHistory', JSON.stringify(getSearchAdd));
+          this.changePlaceHistory(getSearchAdd);
         } else {
-          let listHistory = localStorage.getItem('cityListHistory');
-          this.cityList = JSON.parse(listHistory);
+          this.cityList = this.placeHistory;
         }
       },
       // 获取历史记录
       getHistory() {
-        let listHistory = localStorage.getItem('cityListHistory');
-        let cityList = JSON.parse(listHistory);
-        this.isAllDeleteShow = cityList;
-        this.cityList = cityList;
+        console.log(this.placeHistory.length);
+        if (this.placeHistory.length > 0) {
+          this.isAllDeleteShow = true;
+          this.cityList = this.placeHistory;
+        }else{
+          this.isAllDeleteShow = false;
+        }
       },
       tabCity() {
         this.$router.push({path: '/home'});
       },
       // 清空 cityListHistory 本地数据
       flushLocalStorage() {
-        localStorage.removeItem('cityListHistory');
+        this.changePlaceHistory([]);
         this.isAllDeleteShow = false; // 清空所有按钮隐藏
         this.cityList = null; // 清空历史数据
       },
       // 根据经纬度详细定位
-      getPois(gpsHash) {
-        this.$router.push({path: '/mainP/msite',query: {gpsHash: gpsHash}});
+      getPoints(gpsHash) {
+        this.$router.push({path: '/shop/msite', query: {gpsHash: gpsHash}});
       },
     },
   };

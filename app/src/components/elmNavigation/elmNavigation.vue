@@ -7,7 +7,7 @@
       <span slot="right" class="right-text register" @click="register">注册</span>
     </van-nav-bar>
 
-    <!--      mainP-->
+    <!--      shop-->
     <div class="container">
       <div class="local">
         <span class="md-body-1">当前定位城市：</span>
@@ -25,7 +25,7 @@
         </ul>
       </section>
 
-      <section class="group_city_container" v-for="(group, index) in groupCity" :key="index">
+      <section class="group_city_container" v-for="(group, index) in sortGroupCity" :key="index">
         <p class="city-title">{{index}}</p>
         <ul class="group-cityList">
           <li v-for="city in group" :key="city.id" @click="searchCity(city.id)">{{city.name | omitEd}}</li>
@@ -37,12 +37,13 @@
 </template>
 
 <script>
-  import Vue from 'vue';
+  import {cityGuess, hotCity, groupcity} from "../../service/getData";
+  import {mapMutations, mapState} from "vuex";
 
   export default {
     name: "elmNavigation",
     created() {
-      this.getCity();
+      this.initData();
     },
     data() {
       return {
@@ -52,29 +53,15 @@
       }
     },
     methods: {
-      getCity() {
-        // 定位城市
-        this.getGuessCity('guess');
-        // 热门城市
-        this.getGuessCity('hot');
-        // 所有城市
-        this.getGuessCity('group');
-      },
-      async getGuessCity(type) {
-        if (type === 'guess') {
-          let city = (await Vue.axios.get('/v1/cities', {params: {type: type}})).data;
-          this.guessCity = city;
-        } else if (type === 'hot') {
-          let hot = (await Vue.axios.get('/v1/cities', {params: {type: type}})).data;
-          this.hotCity = hot;
-        } else if (type === 'group') {
-          let group = (await Vue.axios.get('/v1/cities', {params: {type: type}})).data;
-
-          // 排序
-          const ordered = {};
-          Object.keys(group).sort().forEach((key) => ordered[key] = group[key]);
-          this.groupCity = ordered;
-        }
+      async initData() {
+        // 获取首页默认地址
+        this.guessCity = await cityGuess();
+        let geoHash = this.guessCity.latitude + ',' + this.guessCity.longitude;
+        this.changeUserLocation(geoHash);
+        // 获取首页热门城市
+        this.hotCity = await hotCity();
+        // 获取首页所有城市
+        this.groupCity = await groupcity();
       },
       login() {
         this.$router.push({path: '/login'});
@@ -84,6 +71,16 @@
       },
       searchCity(cityId) {
         this.$router.push({name: 'searchCity', params: {cities: cityId}});
+      },
+      ...mapMutations(['changeUserLocation']),
+    },
+    computed: {
+      ...mapState(['userLocation']),
+      // 排序
+      sortGroupCity() {
+        const ordered = {};
+        Object.keys(this.groupCity).sort().forEach((key) => ordered[key] = this.groupCity[key]);
+        return ordered;
       }
     },
     filters: {

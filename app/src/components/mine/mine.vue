@@ -5,7 +5,15 @@
 </template>
 
 <script>
+  import {mapMutations} from "vuex";
+
   export default {
-    name: 'mine'
+    name: 'mine',
+    created() {
+      this.changeTabActive(3);
+    },
+    methods: {
+      ...mapMutations(['changeTabActive']),
+    },
   };
 </script>
