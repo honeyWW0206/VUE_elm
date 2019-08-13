@@ -17,17 +17,6 @@ import createPersistedState from 'vuex-persistedstate';
 // 引入vue-axIos
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-const store=new Vuex.Store({
-  state:{
-    address:{},
-  },
-  mutations:{
-    saveAddress(state,payload){
-      state.address=payload;
-      // console.log(state.address)
-    }
-  }
-});
 
 axios.interceptors.request.use(
   config => {
@@ -62,11 +51,11 @@ router.afterEach((to, from) => {
 /*
   Vuex状态管理
  */
-// import modulesVueX from './vuex';
 
 const store = new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
+    address:{},
     intoRoute: null, // 当前进入的路由
     userLocation: null, // 用户经纬度
     placeHistory: [], // 地区搜索历史
@@ -82,6 +71,9 @@ const store = new Vuex.Store({
     inputText: '',//输入备注内容
   },
   mutations: {
+    saveAddress(state,payload){
+      state.address=payload;
+    },
     changePlaceHistory(state, payload) {
       state.placeHistory = payload;
     },
