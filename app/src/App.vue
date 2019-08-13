@@ -5,15 +5,16 @@
 </template>
 
 <script>
-export default {
-  name: 'App',
-}
+  export default {
+    name: 'App',
+  }
 </script>
 
 <style scoped lang="less">
-#app {
-  width: 100%;
-  height: 100%;
-  background: #f5f5f5;
-}
+  #app {
+    width: 100%;
+    height: 100%;
+    background: #f5f5f5;
+    /*background: #ffffff;*/
+  }
 </style>
