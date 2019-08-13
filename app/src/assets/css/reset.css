@@ -157,6 +157,10 @@ li {
 
 html,
 body {
+<<<<<<< .merge_file_a24124
+=======
+  height: 100%;
+>>>>>>> .merge_file_a15848
   width: 100%;
 
 }
@@ -164,7 +168,11 @@ body {
 body {
   -webkit-text-size-adjust: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+<<<<<<< .merge_file_a24124
   color: 595757;
+=======
+  color: #595757;
+>>>>>>> .merge_file_a15848
   font-family: 'PingFang SC', 'STHeitiSC-Light', "Microsoft YaHei", Arial, "Helvetica Neue", Helvetica, sans-serif;
   /* 所有元素默认大小 */
   font-size: 16px;
@@ -282,4 +290,24 @@ button {
   height: 100%;
   background: gray;
   vertical-align: middle;
+<<<<<<< .merge_file_a24124
 }
+=======
+}
+@font-face {
+  font-family: 'iconfont';  /* project id 1331503 */
+  src: url('//at.alicdn.com/t/font_1331503_9myg6f98js8.eot');
+  src: url('//at.alicdn.com/t/font_1331503_9myg6f98js8.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_1331503_9myg6f98js8.woff2') format('woff2'),
+  url('//at.alicdn.com/t/font_1331503_9myg6f98js8.woff') format('woff'),
+  url('//at.alicdn.com/t/font_1331503_9myg6f98js8.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_1331503_9myg6f98js8.svg#iconfont') format('svg');
+}
+.iconfont{
+  font-family:"iconfont",sans-serif !important;
+  font-size:16px;font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+>>>>>>> .merge_file_a15848
